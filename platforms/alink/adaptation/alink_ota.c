@@ -36,8 +36,6 @@ static const char *TAG = "alink_ota";
 
 int esp_ota_firmware_save(char * buffer, int len)
 {
-    ALINK_PARAM_CHECK(!buffer);
-    ALINK_PARAM_CHECK(len < 0);
     
     ALINK_LOGI("start firmware update");
     return upgrade_download(buffer, len);
