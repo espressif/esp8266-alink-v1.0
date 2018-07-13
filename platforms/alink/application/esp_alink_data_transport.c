@@ -319,7 +319,6 @@ alink_err_t alink_trans_init(alink_product_t* info)
     alink_register_cb(ALINK_FUNC_OTA_UPGRADE, esp_ota_upgrade);
     /*start alink-sdk */
     alink_set_thread_stack_size(&g_thread_stacksize);
-
     alink_set_product_info(info);
 
 #ifdef ALINK_PASSTHROUGH

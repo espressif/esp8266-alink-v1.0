@@ -774,6 +774,35 @@ dhcp_inform(struct netif *netif)
     dhcp_option(&dhcp, DHCP_OPTION_MAX_MSG_SIZE, DHCP_OPTION_MAX_MSG_SIZE_LEN);
     dhcp_option_short(&dhcp, DHCP_MAX_MSG_LEN(netif));
 
+    /**add options for support more router by liuHan**/
+#ifdef LWIP_ESP8266
+#if LWIP_NETIF_HOSTNAME
+    dhcp_option_hostname(&dhcp, netif);
+#endif /* LWIP_NETIF_HOSTNAME */
+
+    dhcp_option(&dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 12/*num options*/);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_DNS_SERVER);
+
+    dhcp_option_byte(&dhcp, DHCP_OPTION_DOMAIN_NAME);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_NB_TINS);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_NB_TINT);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_NB_TIS);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_PRD);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_STATIC_ROUTER);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_CLASSLESS_STATIC_ROUTER);
+    dhcp_option_byte(&dhcp, DHCP_OPTION_VSN);
+
+#else
+    dhcp_option(dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 4/*num options*/);
+    dhcp_option_byte(dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(dhcp, DHCP_OPTION_DNS_SERVER);
+#endif
+
     dhcp_option_trailer(&dhcp);
 
     pbuf_realloc(dhcp.p_out, sizeof(struct dhcp_msg) - DHCP_OPTIONS_LEN + dhcp.options_out_len);
@@ -876,6 +905,35 @@ dhcp_decline(struct netif *netif)
   if (result == ERR_OK) {
     dhcp_option(dhcp, DHCP_OPTION_REQUESTED_IP, 4);
     dhcp_option_long(dhcp, ntohl(ip4_addr_get_u32(&dhcp->offered_ip_addr)));
+
+    /**add options for support more router by liuHan**/
+#ifdef LWIP_ESP8266
+#if LWIP_NETIF_HOSTNAME
+    dhcp_option_hostname(dhcp, netif);
+#endif /* LWIP_NETIF_HOSTNAME */
+
+    dhcp_option(dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 12/*num options*/);
+    dhcp_option_byte(dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(dhcp, DHCP_OPTION_DNS_SERVER);
+
+    dhcp_option_byte(dhcp, DHCP_OPTION_DOMAIN_NAME);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TINS);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TINT);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TIS);
+    dhcp_option_byte(dhcp, DHCP_OPTION_PRD);
+    dhcp_option_byte(dhcp, DHCP_OPTION_STATIC_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_CLASSLESS_STATIC_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_VSN);
+
+#else
+    dhcp_option(dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 4/*num options*/);
+    dhcp_option_byte(dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(dhcp, DHCP_OPTION_DNS_SERVER);
+#endif
 
     dhcp_option_trailer(dhcp);
     /* resize pbuf to reflect true size of options */
@@ -1000,12 +1058,9 @@ dhcp_bind(struct netif *netif)
     /* set renewal period timer */
     LWIP_DEBUGF(DHCP_DEBUG | LWIP_DBG_TRACE, ("dhcp_bind(): t1 renewal timer %"U32_F" secs\n", dhcp->offered_t1_renew));
     timeout = (dhcp->offered_t1_renew + DHCP_COARSE_TIMER_SECS / 2) / DHCP_COARSE_TIMER_SECS;
-    if(timeout > 0xffff) {
-      timeout = 0xffff;
-    }
     dhcp->t1_timeout = (u16_t)timeout;
     if (dhcp->t1_timeout == 0) {
-      dhcp->t1_timeout = 1;
+      dhcp->t1_timeout = 60;
     }
     LWIP_DEBUGF(DHCP_DEBUG | LWIP_DBG_TRACE | LWIP_DBG_STATE, ("dhcp_bind(): set request timeout %"U32_F" msecs\n", dhcp->offered_t1_renew*1000));
   }
@@ -1013,12 +1068,9 @@ dhcp_bind(struct netif *netif)
   if (dhcp->offered_t2_rebind != 0xffffffffUL) {
     LWIP_DEBUGF(DHCP_DEBUG | LWIP_DBG_TRACE, ("dhcp_bind(): t2 rebind timer %"U32_F" secs\n", dhcp->offered_t2_rebind));
     timeout = (dhcp->offered_t2_rebind + DHCP_COARSE_TIMER_SECS / 2) / DHCP_COARSE_TIMER_SECS;
-    if(timeout > 0xffff) {
-      timeout = 0xffff;
-    }
     dhcp->t2_timeout = (u16_t)timeout;
     if (dhcp->t2_timeout == 0) {
-      dhcp->t2_timeout = 1;
+      dhcp->t2_timeout = (dhcp->t1_timeout>>2)*7;
     }
     LWIP_DEBUGF(DHCP_DEBUG | LWIP_DBG_TRACE | LWIP_DBG_STATE, ("dhcp_bind(): set request timeout %"U32_F" msecs\n", dhcp->offered_t2_rebind*1000));
   }
@@ -1118,6 +1170,31 @@ dhcp_renew(struct netif *netif)
 #if LWIP_NETIF_HOSTNAME
     dhcp_option_hostname(dhcp, netif);
 #endif /* LWIP_NETIF_HOSTNAME */
+    /**add options for support more router by liuHan**/
+#ifdef LWIP_ESP8266
+
+    dhcp_option(dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 12/*num options*/);
+    dhcp_option_byte(dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(dhcp, DHCP_OPTION_DNS_SERVER);
+
+    dhcp_option_byte(dhcp, DHCP_OPTION_DOMAIN_NAME);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TINS);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TINT);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TIS);
+    dhcp_option_byte(dhcp, DHCP_OPTION_PRD);
+    dhcp_option_byte(dhcp, DHCP_OPTION_STATIC_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_CLASSLESS_STATIC_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_VSN);
+
+#else
+    dhcp_option(dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 4/*num options*/);
+    dhcp_option_byte(dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(dhcp, DHCP_OPTION_DNS_SERVER);
+#endif
 
     /* append DHCP message trailer */
     dhcp_option_trailer(dhcp);
@@ -1162,6 +1239,30 @@ dhcp_rebind(struct netif *netif)
 #if LWIP_NETIF_HOSTNAME
     dhcp_option_hostname(dhcp, netif);
 #endif /* LWIP_NETIF_HOSTNAME */
+    /**add options for support more router by liuHan**/
+#ifdef LWIP_ESP8266
+    dhcp_option(dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 12/*num options*/);
+    dhcp_option_byte(dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(dhcp, DHCP_OPTION_DNS_SERVER);
+
+    dhcp_option_byte(dhcp, DHCP_OPTION_DOMAIN_NAME);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TINS);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TINT);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TIS);
+    dhcp_option_byte(dhcp, DHCP_OPTION_PRD);
+    dhcp_option_byte(dhcp, DHCP_OPTION_STATIC_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_CLASSLESS_STATIC_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_VSN);
+
+#else
+    dhcp_option(dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 4/*num options*/);
+    dhcp_option_byte(dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(dhcp, DHCP_OPTION_DNS_SERVER);
+#endif
 
 #if 0
     dhcp_option(dhcp, DHCP_OPTION_REQUESTED_IP, 4);
@@ -1209,8 +1310,34 @@ dhcp_reboot(struct netif *netif)
     dhcp_option(dhcp, DHCP_OPTION_MAX_MSG_SIZE, DHCP_OPTION_MAX_MSG_SIZE_LEN);
     dhcp_option_short(dhcp, 576);
 
-    dhcp_option(dhcp, DHCP_OPTION_REQUESTED_IP, 4);
-    dhcp_option_long(dhcp, ntohl(ip4_addr_get_u32(&dhcp->offered_ip_addr)));
+    /**add options for support more router by liuHan**/
+#ifdef LWIP_ESP8266
+#if LWIP_NETIF_HOSTNAME
+    dhcp_option_hostname(dhcp, netif);
+#endif /* LWIP_NETIF_HOSTNAME */
+
+    dhcp_option(dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 12/*num options*/);
+    dhcp_option_byte(dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(dhcp, DHCP_OPTION_DNS_SERVER);
+
+    dhcp_option_byte(dhcp, DHCP_OPTION_DOMAIN_NAME);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TINS);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TINT);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TIS);
+    dhcp_option_byte(dhcp, DHCP_OPTION_PRD);
+    dhcp_option_byte(dhcp, DHCP_OPTION_STATIC_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_CLASSLESS_STATIC_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_VSN);
+
+#else
+    dhcp_option(dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 4/*num options*/);
+    dhcp_option_byte(dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(dhcp, DHCP_OPTION_DNS_SERVER);
+#endif
 
     dhcp_option_trailer(dhcp);
 
@@ -1262,6 +1389,34 @@ dhcp_release(struct netif *netif)
   /* create and initialize the DHCP message header */
   result = dhcp_create_msg(netif, dhcp, DHCP_RELEASE);
   if (result == ERR_OK) {
+	/**add options for support more router by liuHan**/
+#ifdef LWIP_ESP8266
+    LWIP_DEBUGF(DHCP_DEBUG | LWIP_DBG_TRACE, ("dhcp_release: making request\n"));
+
+    dhcp_option(dhcp, DHCP_OPTION_MAX_MSG_SIZE, DHCP_OPTION_MAX_MSG_SIZE_LEN);
+    dhcp_option_short(dhcp, DHCP_MAX_MSG_LEN(netif));
+
+#if LWIP_NETIF_HOSTNAME
+    dhcp_option_hostname(dhcp, netif);
+#endif /* LWIP_NETIF_HOSTNAME */
+
+    dhcp_option(dhcp, DHCP_OPTION_PARAMETER_REQUEST_LIST, 12/*num options*/);
+    dhcp_option_byte(dhcp, DHCP_OPTION_SUBNET_MASK);
+    dhcp_option_byte(dhcp, DHCP_OPTION_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_BROADCAST);
+    dhcp_option_byte(dhcp, DHCP_OPTION_DNS_SERVER);
+
+    dhcp_option_byte(dhcp, DHCP_OPTION_DOMAIN_NAME);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TINS);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TINT);
+    dhcp_option_byte(dhcp, DHCP_OPTION_NB_TIS);
+    dhcp_option_byte(dhcp, DHCP_OPTION_PRD);
+    dhcp_option_byte(dhcp, DHCP_OPTION_STATIC_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_CLASSLESS_STATIC_ROUTER);
+    dhcp_option_byte(dhcp, DHCP_OPTION_VSN);
+
+#endif
+
     dhcp_option_trailer(dhcp);
 
     pbuf_realloc(dhcp->p_out, sizeof(struct dhcp_msg) - DHCP_OPTIONS_LEN + dhcp->options_out_len);

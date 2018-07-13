@@ -1,0 +1,243 @@
+Archive member included because of file (symbol)
+
+/home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+                              (call_start_cpu)
+
+Discarded input sections
+
+ .text          0x0000000000000000        0x0 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+ .data          0x0000000000000000        0x0 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+ .bss           0x0000000000000000        0x0 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+ .text.gen_bin_addr
+                0x0000000000000000       0x17 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+ .xt.lit        0x0000000000000000       0x18 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+ .xt.prop       0x0000000000000000      0x2e8 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+dport0_seg       0x000000003ff00000 0x0000000000000010
+dram_seg         0x000000003ffe8000 0x0000000000018000
+iram_seg         0x0000000040108000 0x0000000000008000
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+START GROUP
+LOAD /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a
+LOAD /opt/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.2/libgcc.a
+LOAD /opt/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.2/../../../../xtensa-lx106-elf/lib/libstdc++.a
+LOAD /opt/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.2/libgcov.a
+END GROUP
+
+.iram1.text     0x0000000040108000        0x0
+                0x0000000040108000                . = ALIGN (0x10)
+ *(.entry.text)
+ *(.init.literal)
+ *(.init)
+
+.iram.text      0x0000000040108000      0x2bd
+                0x0000000040108000                _stext = .
+                0x0000000040108000                _text_start = ABSOLUTE (.)
+ *(.literal .text .literal.* .text.* .stub .gnu.warning .gnu.linkonce.literal.* .gnu.linkonce.t.*.literal .gnu.linkonce.t.*)
+ .literal.get_flash_bin_addr
+                0x0000000040108000        0xc /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+ .literal.jump_to_run_addr
+                0x000000004010800c        0xc /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+                                         0x14 (size before relaxing)
+ .literal.call_start_cpu
+                0x0000000040108018       0x6c /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+                                         0xd4 (size before relaxing)
+ .text.get_flash_bin_addr
+                0x0000000040108084       0x3f /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+                0x0000000040108084                get_flash_bin_addr
+ *fill*         0x00000000401080c3        0x1 
+ .text.jump_to_run_addr
+                0x00000000401080c4       0x47 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+                0x00000000401080c4                jump_to_run_addr
+ *fill*         0x000000004010810b        0x1 
+ .text.call_start_cpu
+                0x000000004010810c      0x1b1 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+                                        0x1b5 (size before relaxing)
+                0x000000004010810c                call_start_cpu
+ *fill*         0x00000000401082bd        0x0 
+ *fill*         0x00000000401082bd        0x0 
+ *(.iram1 .iram1.*)
+ *(.fini.literal)
+ *(.fini)
+ *(.gnu.version)
+                0x00000000401082bd                _text_end = ABSOLUTE (.)
+                0x00000000401082bd                _etext = .
+
+.dram0.bss      0x000000003ffe8000        0x0
+                0x000000003ffe8000                . = ALIGN (0x8)
+                0x000000003ffe8000                _bss_start = ABSOLUTE (.)
+ *(.dynsbss)
+ *(.sbss)
+ *(.sbss.*)
+ *(.gnu.linkonce.sb.*)
+ *(.scommon)
+ *(.sbss2)
+ *(.sbss2.*)
+ *(.gnu.linkonce.sb2.*)
+ *(.dynbss)
+ *(.bss)
+ *(.bss.*)
+ *(.gnu.linkonce.b.*)
+ *(COMMON)
+                0x000000003ffe8000                . = ALIGN (0x8)
+                0x000000003ffe8000                _bss_end = ABSOLUTE (.)
+
+.dram0.data     0x000000003ffe8000      0x2fc
+                0x000000003ffe8000                _data_start = ABSOLUTE (.)
+ *(.data)
+ *(.data.*)
+ .data.load_bin_len
+                0x000000003ffe8000        0x4 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+                0x000000003ffe8000                load_bin_len
+ .data.load_bin
+                0x000000003ffe8004      0x2f8 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+                0x000000003ffe8004                load_bin
+ *(.gnu.linkonce.d.*)
+ *(.data1)
+ *(.sdata)
+ *(.sdata.*)
+ *(.gnu.linkonce.s.*)
+ *(.sdata2)
+ *(.sdata2.*)
+ *(.gnu.linkonce.s2.*)
+ *(.jcr)
+                0x000000003ffe82fc                _data_end = ABSOLUTE (.)
+
+.dram0.rodata   0x000000003ffe82fc      0x17c
+                0x000000003ffe82fc                _rodata_start = ABSOLUTE (.)
+ *(.rodata)
+ *(.rodata.*)
+ .rodata.str1.4
+                0x000000003ffe82fc      0x160 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+ .rodata.call_start_cpu
+                0x000000003ffe845c       0x1c /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+ *(.gnu.linkonce.r.*)
+ *(.rodata1)
+                0x000000003ffe8478                __XT_EXCEPTION_TABLE_ = ABSOLUTE (.)
+ *(.xt_except_table)
+ *(.gcc_except_table)
+ *(.gnu.linkonce.e.*)
+ *(.gnu.version_r)
+ *(.eh_frame)
+                0x000000003ffe8478                . = ((. + 0x3) & 0xfffffffffffffffc)
+                0x000000003ffe8478                __init_array_start = ABSOLUTE (.)
+ *crtbegin.o(.ctors)
+ *(EXCLUDE_FILE(*crtend.o) .ctors)
+ *(SORT(.ctors.*))
+ *(.ctors)
+                0x000000003ffe8478                __init_array_end = ABSOLUTE (.)
+ *crtbegin.o(.dtors)
+ *(EXCLUDE_FILE(*crtend.o) .dtors)
+ *(SORT(.dtors.*))
+ *(.dtors)
+                0x000000003ffe8478                __XT_EXCEPTION_DESCS_ = ABSOLUTE (.)
+ *(.xt_except_desc)
+ *(.gnu.linkonce.h.*)
+                0x000000003ffe8478                __XT_EXCEPTION_DESCS_END__ = ABSOLUTE (.)
+ *(.xt_except_desc_end)
+ *(.dynamic)
+ *(.gnu.version_d)
+                0x000000003ffe8478                _rodata_end = ABSOLUTE (.)
+                0x000000003ffe8478                _lit4_start = ABSOLUTE (.)
+ *(*.lit4)
+ *(.lit4.*)
+ *(.gnu.linkonce.lit4.*)
+                0x000000003ffe8478                _lit4_end = ABSOLUTE (.)
+                0x000000003ffe8478                . = ALIGN (0x4)
+                0x000000003ffe8478                _heap_start = ABSOLUTE (.)
+                0x00000000400040c0                PROVIDE (SPI_sector_erase, 0x400040c0)
+                0x0000000040004174                PROVIDE (SPI_page_program, 0x40004174)
+                0x00000000400042ac                PROVIDE (SPI_read_data, 0x400042ac)
+                0x00000000400043c8                PROVIDE (SPI_read_status, 0x400043c8)
+                0x0000000040004400                PROVIDE (SPI_write_status, 0x40004400)
+                0x000000004000443c                PROVIDE (SPI_write_enable, 0x4000443c)
+                0x000000004000448c                PROVIDE (Wait_SPI_Idle, 0x4000448c)
+                0x00000000400044c0                PROVIDE (Enable_QMode, 0x400044c0)
+                0x0000000040004508                PROVIDE (Disable_QMode, 0x40004508)
+                0x0000000040004678                PROVIDE (Cache_Read_Enable, 0x40004678)
+                0x00000000400047f0                PROVIDE (Cache_Read_Disable, 0x400047f0)
+                0x0000000040004f40                PROVIDE (lldesc_build_chain, 0x40004f40)
+                0x0000000040005050                PROVIDE (lldesc_num2link, 0x40005050)
+                0x000000004000507c                PROVIDE (lldesc_set_owner, 0x4000507c)
+                0x000000004000c538                PROVIDE (__adddf3, 0x4000c538)
+                0x000000004000c180                PROVIDE (__addsf3, 0x4000c180)
+                0x000000004000cb94                PROVIDE (__divdf3, 0x4000cb94)
+                0x000000004000ce60                PROVIDE (__divdi3, 0x4000ce60)
+                0x000000004000dc88                PROVIDE (__divsi3, 0x4000dc88)
+                0x000000004000cdfc                PROVIDE (__extendsfdf2, 0x4000cdfc)
+                0x000000004000ccb8                PROVIDE (__fixdfsi, 0x4000ccb8)
+                0x000000004000cd00                PROVIDE (__fixunsdfsi, 0x4000cd00)
+                0x000000004000c4c4                PROVIDE (__fixunssfsi, 0x4000c4c4)
+                0x000000004000e2f0                PROVIDE (__floatsidf, 0x4000e2f0)
+                0x000000004000e2ac                PROVIDE (__floatsisf, 0x4000e2ac)
+                0x000000004000e2e8                PROVIDE (__floatunsidf, 0x4000e2e8)
+                0x000000004000e2a4                PROVIDE (__floatunsisf, 0x4000e2a4)
+                0x000000004000c8f0                PROVIDE (__muldf3, 0x4000c8f0)
+                0x0000000040000650                PROVIDE (__muldi3, 0x40000650)
+                0x000000004000c3dc                PROVIDE (__mulsf3, 0x4000c3dc)
+                0x000000004000c688                PROVIDE (__subdf3, 0x4000c688)
+                0x000000004000c268                PROVIDE (__subsf3, 0x4000c268)
+                0x000000004000cd5c                PROVIDE (__truncdfsf2, 0x4000cd5c)
+                0x000000004000d310                PROVIDE (__udivdi3, 0x4000d310)
+                0x000000004000e21c                PROVIDE (__udivsi3, 0x4000e21c)
+                0x000000004000d770                PROVIDE (__umoddi3, 0x4000d770)
+                0x000000004000e268                PROVIDE (__umodsi3, 0x4000e268)
+                0x000000004000dcf0                PROVIDE (__umulsidi3, 0x4000dcf0)
+                0x000000004000de84                PROVIDE (bzero, 0x4000de84)
+                0x000000004000dea8                PROVIDE (memcmp, 0x4000dea8)
+                0x000000004000df48                PROVIDE (memcpy, 0x4000df48)
+                0x000000004000e04c                PROVIDE (memmove, 0x4000e04c)
+                0x000000004000e190                PROVIDE (memset, 0x4000e190)
+                0x000000004000bdc8                PROVIDE (strcmp, 0x4000bdc8)
+                0x000000004000bec8                PROVIDE (strcpy, 0x4000bec8)
+                0x000000004000bf4c                PROVIDE (strlen, 0x4000bf4c)
+                0x000000004000bfa8                PROVIDE (strncmp, 0x4000bfa8)
+                0x000000004000c0a0                PROVIDE (strncpy, 0x4000c0a0)
+                0x000000004000e1e0                PROVIDE (strstr, 0x4000e1e0)
+                0x0000000040004cf0                PROVIDE (gpio_input_get, 0x40004cf0)
+                0x0000000040004ed4                PROVIDE (gpio_pin_wakeup_disable, 0x40004ed4)
+                0x0000000040004e90                PROVIDE (gpio_pin_wakeup_enable, 0x40004e90)
+                0x0000000040001f00                PROVIDE (ets_io_vprintf, 0x40001f00)
+                0x00000000400018b4                PROVIDE (ets_memcpy, 0x400018b4)
+                0x00000000400024cc                PROVIDE (ets_printf, 0x400024cc)
+                0x0000000040004b1c                PROVIDE (SPIRead, 0x40004b1c)
+OUTPUT(/home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/bootloader.elf elf32-xtensa-le)
+
+.debug_frame    0x0000000000000000       0x80
+ .debug_frame   0x0000000000000000       0x80 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+
+.debug_info     0x0000000000000000      0x768
+ .debug_info    0x0000000000000000      0x768 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+
+.debug_abbrev   0x0000000000000000      0x1de
+ .debug_abbrev  0x0000000000000000      0x1de /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+
+.debug_loc      0x0000000000000000      0x1bb
+ .debug_loc     0x0000000000000000      0x1bb /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+
+.debug_aranges  0x0000000000000000       0x38
+ .debug_aranges
+                0x0000000000000000       0x38 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+
+.debug_ranges   0x0000000000000000       0x28
+ .debug_ranges  0x0000000000000000       0x28 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+
+.debug_line     0x0000000000000000      0x30b
+ .debug_line    0x0000000000000000      0x30b /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+
+.debug_str      0x0000000000000000      0x414
+ .debug_str     0x0000000000000000      0x414 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+                                        0x440 (size before relaxing)
+
+.comment        0x0000000000000000       0x21
+ .comment       0x0000000000000000       0x21 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
+                                         0x22 (size before relaxing)
+
+.xtensa.info    0x0000000000000000       0x38
+ .xtensa.info   0x0000000000000000       0x38 /home/liqingqiao/esp/ESP8266_RTOS_SDK/examples/get-started/project_template/build/bootloader/main/libmain.a(bootloader_start.o)
